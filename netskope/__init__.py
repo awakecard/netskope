@@ -31,12 +31,12 @@ class netskope(object):
 		
 		if resp['status'] == str(200):
 			return json.loads(content)
-#		else:
-#			return False	#SHOULD RETURN AN ERROR CODE
+		else:
+			return False	#SHOULD RETURN AN ERROR CODE
 ########################################################################################			
 	def events(self,query, type, **kwargs):
 		#timeperiod = int (3600. 86400, 604800,2592000)
-		#startend = (start, end) uniz epoch time
+		#startend = [start, end] uniz epoch time
 		#limit = int < 5000
 		#skip = int 
 						
@@ -59,27 +59,34 @@ class netskope(object):
 		
 		if timeperiod == None:
 			if isinstance(startend, list):
-				#RUN QUERY
+
 				params={'token':self.apikey, 'type':type, 'query':query,'starttime':startend[0],'endtime':startend[1]}
-				
 				requrl = eventsurl + "?" + urllib.urlencode(params)
 
 			else:
 				raise ValueError('startend must be a list')
 		elif startend == None:				#USING TIMEPERIOD
 			if isinstance(timeperiod, int):
-				#RUN QUERY
+
 				params={'token':self.apikey, 'type':type, 'query':query,'timeperiod':timeperiod}
-				
 				requrl = eventsurl + "?" + urllib.urlencode(params)
 				
 			else:
 				raise ValueError('timeperiod must be an integer')
+		else:
+			raise ValueError('The parameters are not correct')
 		
 		return self._makerequest(requrl)
 ########################################################################################					
 	def alerts(self,query, type, **kwargs):
-		None
+		#timeperiod = int (3600. 86400, 604800,2592000)
+		#startend = (start, end) uniz epoch time
+		#limit = int < 5000
+		#skip = int 
+		
+		alertsurl = self.url + 'alerts'
+		
+		
 ########################################################################################		
 	def logstatus(self,query, type, **kwargs):
 		None			

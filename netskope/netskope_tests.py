@@ -32,6 +32,6 @@ def test_basicquery():
 	for x in somejson['data']:
 		msg = "%s netskope type='%s'" % (str(time.strftime('%Y-%m-%dT%H:%M:%SZ')), eventtype)
 		for k,v in x.iteritems():
-			msg = "%s %s='%s'" % (msg, k, v)
+			msg = "%s %s='%s'" % (msg.strip(), k, v)
 		print msg
 		#netsk.sendsyslog(msg.strip(), '192.168.149.141') 
