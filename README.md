@@ -6,8 +6,8 @@ httplib2 0.9.1
 
 ###Development Status
 https://<tenant>.goskope.com/api/v1/  
-	events - partially working  (no pagination)  
-	alerts - partially working (no pagination)  
+	events - partially working  (pagination added - no error checking)  
+	alerts - partially working (pagination added - no error checking)  
 	logstatus - not started  
 	report - not started  
 	userconfig - not started  
