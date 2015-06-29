@@ -1,0 +1,2 @@
+1. No error checking on failed HTTP connections
+2. No error checking on incorrect alert or event types

@@ -28,14 +28,22 @@ class netskope(object):
 		if resp['status'] == str(200):
 			return json.loads(content)
 		else:
-			return False	#SHOULD RETURN AN ERROR CODE
+			try:
+				return resp['status']
+			except:
+				raise ValueError('something bad hapepned making the request to ' + url)
+				return False
 ########################################################################################			
 	def events(self,query, type, **kwargs):
 		#timeperiod = int (3600. 86400, 604800,2592000)
 		#startend = [start, end] uniz epoch time
 		#limit = int < 5000
 		#skip = int 
-						
+		
+		allowedtypes = ['connection', 'application', 'audit']
+		if self._inlist(type, allowedtypes) != True:
+			raise ValueError('Type must be a string with one of the following values [connection, application, audit]')
+		
 		eventsurl = self.url + 'events'
 		
 		try: timeperiod = kwargs['timeperiod']
@@ -45,10 +53,10 @@ class netskope(object):
 		except:startend = None
 		
 		try:limit = kwargs['limit']
-		except:limit = None
+		except:limit = 5000
 		
-		try:limit = kwargs['skip']
-		except:limit = None
+		try:skip = kwargs['skip']
+		except:skip = 0
 		
 		if timeperiod == None and startend == None:
 			raise ValueError('Must set either timeperiod or startend (as a list of unix epoch time)')
@@ -56,15 +64,16 @@ class netskope(object):
 		if timeperiod == None:
 			if isinstance(startend, list):
 
-				params={'token':self.apikey, 'type':type, 'query':query,'starttime':startend[0],'endtime':startend[1]}
+				params={'token':self.apikey, 'type':type, 'query':query,'starttime':startend[0],'endtime':startend[1], 'limit':limit, 'skip':skip}
 				requrl = eventsurl + "?" + urllib.urlencode(params)
+				print requrl
 
 			else:
 				raise ValueError('startend must be a list')
 		elif startend == None:				#USING TIMEPERIOD
 			if isinstance(timeperiod, int):
 
-				params={'token':self.apikey, 'type':type, 'query':query,'timeperiod':timeperiod}
+				params={'token':self.apikey, 'type':type, 'query':query,'timeperiod':timeperiod, 'limit':limit, 'skip':skip}
 				requrl = eventsurl + "?" + urllib.urlencode(params)
 				
 			else:
@@ -117,7 +126,16 @@ class netskope(object):
 		return self._makerequest(requrl)
 ########################################################################################		
 	def logstatus(self,query, type, **kwargs):
-		None			
+		None	
+########################################################################################	
+	def report(self, query, type, **kwargs):
+		None
+########################################################################################	
+	def userconfig(self,email, configtype):
+		None
+########################################################################################	
+	def quarentine(self, op, **kwargs):
+		None
 ########################################################################################	
 	def _inlist(self, val, lst):
 		
