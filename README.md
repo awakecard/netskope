@@ -6,9 +6,9 @@ httplib2 0.9.1
 
 
 https://<tenant>.goskope.com/api/v1/
-	*events - partially working
-	*alerts - not started
-	*logstatus - not started
-	*report - not started
-	*userconfig - not started
-	*quarentine - not started
+	events - partially working  
+	alerts - not started  
+	logstatus - not started  
+	report - not started  
+	userconfig - not started  
+	quarentine - not started  
