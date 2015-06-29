@@ -55,7 +55,7 @@ class netskope(object):
 		except:limit = None
 		
 		if timeperiod == None and startend == None:
-			raise ValueError('Must set either timeperiod or startend (as a list)')
+			raise ValueError('Must set either timeperiod or startend (as a list of unix epoch time)')
 		
 		if timeperiod == None:
 			if isinstance(startend, list):
@@ -86,7 +86,39 @@ class netskope(object):
 		
 		alertsurl = self.url + 'alerts'
 		
+		try: timeperiod = kwargs['timeperiod']
+		except:timeperiod = None
 		
+		try: startend = kwargs['startend']
+		except:startend = None
+		
+		try:limit = kwargs['limit']
+		except:limit = None
+		
+		try:limit = kwargs['skip']
+		except:limit = None
+		
+		if timeperiod == None and startend == None:
+			raise ValueError('Must set either timeperiod or startend (as a list)')
+		
+		if timeperiod == None:
+			if isinstance(startend, list):
+				params={'query':query, 'token':self.apikey, 'starttime':startend[0], 'endtime':startend[1]}
+				requrl = alertsurl + "?" + urllib.urlencode(params)
+			else:
+				raise ValueError('startend must be a list with a two unix epoch times')
+		
+		elif startend == None:
+			if isinstance(timeperiod, int):
+			
+				params={'token':self.apikey, 'type':type, 'query':query,'timeperiod':timeperiod}
+				requrl = alertsurl + "?" + urllib.urlencode(params)
+			else:
+				raise ValueError('Timeperiod must be an integer with the following values 3600 | 86400 | 604800 | 2592000')
+		else:
+			raise ValueError('The parameters are not correct')
+
+		return self._makerequest(requrl)
 ########################################################################################		
 	def logstatus(self,query, type, **kwargs):
 		None			
