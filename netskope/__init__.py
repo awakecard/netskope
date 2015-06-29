@@ -3,11 +3,7 @@
 #VERSION: 0.1
 
 import httplib2
-import ssl
-import re
 import time
-import logging
-import os
 import json
 import urllib
 
@@ -122,24 +118,6 @@ class netskope(object):
 ########################################################################################		
 	def logstatus(self,query, type, **kwargs):
 		None			
-########################################################################################	
-	def sendsyslog(self,msg, syslogserver, port=514, ratelimit=0.1):
-		try:
-			from logging.handlers import SysLogHandler
-			syslogger = logging.getLogger('syslog')
-			syslogger.setLevel(logging.INFO)
-			syslog = SysLogHandler((syslogserver, port))
-			syslogger.addHandler(syslog)
-		except Exception, err:
-				raise #Exception("failed to start logger")
-			
-		try:
-			syslogger.info(msg)
-	
-			time.sleep(ratelimit)
-			return True
-		except Exception, err:
-			raise #Exception('FAILED TO SEND') #SHOULD LOG SOMEWHERE
 ########################################################################################	
 	def _inlist(self, val, lst):
 		
